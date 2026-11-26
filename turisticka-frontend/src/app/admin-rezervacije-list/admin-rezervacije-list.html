@@ -1,0 +1,50 @@
+<div class="container mt-5">
+    <h2 class="mb-4">Sve rezervacije</h2>
+
+    @if (greska) {
+    <div class="alert alert-danger">{{ greska }}</div>
+    }
+
+    @if (rezervacije.length === 0) {
+    <p class="text-muted">Nema rezervacija.</p>
+    }
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Korisnik</th>
+                <th>Aranžman</th>
+                <th>Broj osoba</th>
+                <th>Ukupna cena</th>
+                <th>Datum rezervacije</th>
+                <th>Status</th>
+                <th>Akcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (r of rezervacije; track r.id) {
+            <tr>
+                <td>{{ r.korisnickoIme }}</td>
+                <td>{{ r.aranzmanNaziv }}</td>
+                <td>{{ r.brojOsoba }}</td>
+                <td>{{ r.ukupnaCena | currency:'EUR' }}</td>
+                <td>{{ r.datumRezervacije | date:'short' }}</td>
+                <td>
+                    <select 
+                        class="form-select form-select-sm" 
+                        [(ngModel)]="r.status"
+                        (ngModelChange)="promeniStatus(r, $event)"
+                    >
+                        @for (s of statusOptions; track s) {
+                            <option [value]="s">{{ s }}</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <button class="btn btn-outline-danger btn-sm" (click)="otkaziRezervaciju(r)">Otkaži</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

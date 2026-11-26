@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center mt-5">
+  <div class="card p-5" style="min-width: 400px;">
+    <h3 class="mb-4">Prijava</h3>
+
+    <form #loginForma="ngForm" (ngSubmit)="submit(loginForma)">
+
+      <div class="mb-3">
+        <label for="korisnickoIme" class="form-label">Korisničko ime</label>
+        <input
+          #korisnickoIme="ngModel"
+          id="korisnickoIme"
+          type="text"
+          class="form-control"
+          name="korisnickoIme"
+          [(ngModel)]="podaci.korisnickoIme"
+          required
+        />
+        @if (korisnickoIme.invalid && (korisnickoIme.dirty || korisnickoIme.touched)) {
+          <span class="text-danger">Korisničko ime je obavezno.</span>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="lozinka" class="form-label">Lozinka</label>
+        <input
+          #lozinka="ngModel"
+          id="lozinka"
+          type="password"
+          class="form-control"
+          name="lozinka"
+          [(ngModel)]="podaci.lozinka"
+          required
+        />
+        @if (lozinka.invalid && (lozinka.dirty || lozinka.touched)) {
+          <span class="text-danger">Lozinka je obavezna.</span>
+        }
+      </div>
+
+      @if (greska) {
+        <div class="alert alert-danger">{{ greska }}</div>
+      }
+
+      <button type="submit" class="btn btn-primary w-100" [disabled]="loginForma.invalid">Prijavi se</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="container mt-5">
+  <h2 class="mb-4">Upravljanje kategorijama</h2>
+
+  @if (greska) {
+    <div class="alert alert-danger">{{ greska }}</div>
+  }
+
+  <form #dodajForma="ngForm" (ngSubmit)="dodajKategoriju(dodajForma)" class="d-flex gap-2 mb-4">
+    <input
+      type="text"
+      class="form-control"
+      name="novaKategorija"
+      [(ngModel)]="novaKategorija"
+      placeholder="Naziv nove kategorije"
+      required
+      minlength="2"
+    />
+    <button type="submit" class="btn btn-primary" [disabled]="dodajForma.invalid">Dodaj</button>
+  </form>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Naziv</th>
+        <th style="width: 200px;">Akcije</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (k of kategorije; track k.id) {
+        <tr>
+          @if (izmenaId === k.id) {
+            <td>
+              <input type="text" class="form-control" [(ngModel)]="izmenaNaziv" name="izmenaNaziv" />
+            </td>
+            <td>
+              <button class="btn btn-success btn-sm" (click)="sacuvajIzmenu(k.id)">Sačuvaj</button>
+              <button class="btn btn-secondary btn-sm" (click)="otkaziIzmenu()">Otkaži</button>
+            </td>
+          } @else {
+            <td>{{ k.naziv }}</td>
+            <td>
+              <button class="btn btn-outline-primary btn-sm" (click)="pocniIzmenu(k)">Izmeni</button>
+              <button class="btn btn-outline-danger btn-sm" (click)="obrisiKategoriju(k)">Obriši</button>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

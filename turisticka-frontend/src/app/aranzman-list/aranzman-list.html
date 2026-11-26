@@ -1,0 +1,84 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12">
+
+      <h2 class="mb-4 fw-bold text-dark">Naši aranžmani</h2>
+
+      @if (aranzmani.length === 0) {
+        <p class="text-muted fs-5">Nema dostupnih aranžmana.</p>
+      }
+
+      <div class="card shadow-sm p-3 mb-4">
+        <div class="row g-3 align-items-end">
+          <div class="col-6 col-md-3 col-lg-2">
+            <label class="form-label small text-muted mb-1">Naziv</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="naziv" 
+              placeholder="Pretraži po nazivu" />
+          </div>
+          
+          <div class="col-6 col-md-3 col-lg-2">
+            <label class="form-label small text-muted mb-1">Kategorija</label>
+            <select 
+              class="form-select" 
+              [(ngModel)]="kategorijaId"
+            >
+              <option [value]="0">Sve kategorije</option>
+              @for (k of kategorije; track k.id) {
+                <option [value]="k.id">{{ k.naziv }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-6 col-md-3 col-lg-2">
+            <label class="form-label small text-muted mb-1">Cena od</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              [(ngModel)]="cenaOd" 
+              min="0" 
+              placeholder="€" />
+          </div>
+
+          <div class="col-6 col-md-3 col-lg-2">
+            <label class="form-label small text-muted mb-1">Cena do</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              [(ngModel)]="cenaDo" 
+              min="0" 
+              placeholder="€" />
+          </div>
+
+          <div class="col-6 col-md-3 col-lg-2">
+            <label class="form-label small text-muted mb-1">Datum od</label>
+            <input 
+              type="date" 
+              class="form-control" 
+              [(ngModel)]="datumOd" />
+          </div>
+          
+          <div class="col-6 col-md-3 col-lg-2 d-flex gap-2">
+            <button class="btn btn-primary flex-fill" (click)="pretrazi()">Traži</button>
+            <button class="btn btn-outline-secondary" (click)="resetFilter()" title="Resetuj filter">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+        @for (a of aranzmani; track a.id) {
+          <div class="col">
+            <app-aranzman-card 
+              [aranzman]="a" 
+              [isAdmin]="authService.isAdmin()"
+              (obrisi)="obrisiAranzman($event)"
+            ></app-aranzman-card>
+          </div>
+        }
+      </div>
+
+    </div>
+  </div>
+</div>

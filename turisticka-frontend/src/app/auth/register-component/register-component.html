@@ -1,0 +1,89 @@
+<div class="d-flex justify-content-center mt-5">
+  <div class="card p-5" style="min-width: 400px;">
+    <h3 class="mb-4">Registracija</h3>
+
+    <form #registerForma="ngForm" (ngSubmit)="submit(registerForma)">
+
+      <div class="mb-3">
+        <label for="korisnickoIme" class="form-label">Korisničko ime</label>
+        <input
+          #korisnickoIme="ngModel"
+          id="korisnickoIme"
+          type="text"
+          class="form-control"
+          name="korisnickoIme"
+          [(ngModel)]="podaci.korisnickoIme"
+          required
+          minlength="2"
+          maxlength="50"
+        />
+        @if (korisnickoIme.invalid && (korisnickoIme.dirty || korisnickoIme.touched)) {
+          <span class="text-danger">Korisničko ime mora imati 2-50 karaktera.</span>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input
+          #email="ngModel"
+          id="email"
+          type="email"
+          class="form-control"
+          name="email"
+          [(ngModel)]="podaci.email"
+          required
+          email
+        />
+        @if (email.invalid && (email.dirty || email.touched)) {
+          <span class="text-danger">Unesite ispravan email.</span>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="lozinka" class="form-label">Lozinka</label>
+        <input
+          #lozinka="ngModel"
+          id="lozinka"
+          type="password"
+          class="form-control"
+          name="lozinka"
+          [(ngModel)]="podaci.lozinka"
+          required
+          minlength="8"
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$"
+        />
+        @if (lozinka.invalid && (lozinka.dirty || lozinka.touched)) {
+          <span class="text-danger">
+            Lozinka mora imati bar 8 karaktera, veliko i malo slovo i broj.
+          </span>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="uloga" class="form-label">Uloga</label>
+        <select
+          #ulogaInput="ngModel"
+          id="uloga"
+          class="form-select"
+          name="uloga"
+          [(ngModel)]="podaci.uloga.id"
+          required
+        >
+          <option [value]="0" disabled>Izaberite ulogu</option>
+          @for (u of uloge; track u.id) {
+            <option [value]="u.id">{{ u.naziv }}</option>
+          }
+        </select>
+      </div>
+
+      @if (greska) {
+        <div class="alert alert-danger">{{ greska }}</div>
+      }
+      @if (poruka) {
+        <div class="alert alert-success">{{ poruka }}</div>
+      }
+
+      <button type="submit" class="btn btn-primary w-100" [disabled]="registerForma.invalid">Registruj se</button>
+    </form>
+  </div>
+</div>

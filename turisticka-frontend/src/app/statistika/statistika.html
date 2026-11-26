@@ -1,0 +1,49 @@
+<div class="container mt-5">
+  <h2 class="mb-4">Statistika</h2>
+
+  <div class="card shadow-sm p-4 mb-4">
+    <h5 class="mb-3">Broj rezervacija po aranžmanu</h5>
+
+    @if (rezervacijePoAranzmanu.length === 0) {
+      <p class="text-muted">Nema podataka.</p>
+    }
+
+    @for (stavka of rezervacijePoAranzmanu; track stavka[0]) {
+      <div class="mb-2">
+        <div class="d-flex justify-content-between">
+          <span>{{ stavka[0] }}</span>
+          <strong>{{ stavka[1] }}</strong>
+        </div>
+        <div class="progress" style="height: 10px;">
+          <div
+            class="progress-bar bg-primary"
+            [style.width.%]="procenat(stavka[1], rezervacijePoAranzmanu)"
+          ></div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="card shadow-sm p-4">
+    <h5 class="mb-3">Prihod po aranžmanu</h5>
+
+    @if (prihodiPoAranzmanu.length === 0) {
+      <p class="text-muted">Nema podataka.</p>
+    }
+
+    @for (stavka of prihodiPoAranzmanu; track stavka[0]) {
+      <div class="mb-2">
+        <div class="d-flex justify-content-between">
+          <span>{{ stavka[0] }}</span>
+          <strong>{{ stavka[1] | currency:'EUR' }}</strong>
+        </div>
+        <div class="progress" style="height: 10px;">
+          <div
+            class="progress-bar bg-success"
+            [style.width.%]="procenat(stavka[1], prihodiPoAranzmanu)"
+          ></div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="container mt-5">
+  <h2 class="mb-4">Moje rezervacije</h2>
+
+  @if (greska) {
+    <div class="alert alert-danger">{{ greska }}</div>
+  }
+
+  @if (rezervacije.length === 0) {
+    <p class="text-muted">Nemaš nijednu rezervaciju.</p>
+  }
+
+  @for (r of rezervacije; track r.id) {
+    <div class="card shadow-sm mb-3 p-3">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h5>{{ r.aranzmanNaziv }}</h5>
+          <p class="mb-1">Broj osoba: {{ r.brojOsoba }}</p>
+          <p class="mb-1">Ukupna cena: <strong>{{ r.ukupnaCena | currency:'EUR' }}</strong></p>
+          <p class="mb-1">
+            Status:
+            <span class="badge"
+              [class.bg-warning]="r.status === 'pending'"
+              [class.bg-success]="r.status === 'approved'"
+              [class.bg-danger]="r.status === 'canceled'">
+              {{ r.status }}
+            </span>
+          </p>
+          <small class="text-muted">Rezervisano: {{ r.datumRezervacije | date:'short' }}</small>
+        </div>
+        <button class="btn btn-outline-danger btn-sm" (click)="otkaziRezervaciju(r)">Otkaži</button>
+      </div>
+    </div>
+  }
+</div>

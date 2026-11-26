@@ -1,0 +1,27 @@
+<div class="card h-100 shadow-sm" [routerLink]="['/aranzman', aranzman.id]" style="cursor: pointer;">
+  <div class="card-body">
+    <h5 class="card-title">{{ aranzman.naziv }}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{ aranzman.kategorijaNaziv }}</h6>
+    <p class="card-text">{{ aranzman.opis }}</p>
+    <p class="card-text"><strong>{{ aranzman.cena | currency:'EUR' }}</strong> po osobi</p>
+    <p class="card-text">
+      <span class="badge" [class.bg-success]="aranzman.slobodnaMesta > 0" [class.bg-danger]="aranzman.slobodnaMesta === 0">
+        {{ aranzman.slobodnaMesta > 0 ? aranzman.slobodnaMesta + ' slobodnih mesta' : 'Popunjeno' }}
+      </span>
+    </p>
+    <p class="card-text">
+      <small class="text-muted">{{ aranzman.datumPocetka | date }} - {{ aranzman.datumZavrsetka | date }}</small>
+    </p>
+
+    @if (isAdmin) {
+      <div class="d-flex gap-2 mt-2">
+        <a
+          class="btn btn-outline-primary btn-sm"
+          [routerLink]="['/admin/aranzman', aranzman.id, 'izmeni']"
+          (click)="onIzmeniKlik($event)"
+        >Izmeni</a>
+        <button class="btn btn-outline-danger btn-sm" (click)="onObrisi($event)">Obriši</button>
+      </div>
+    }
+  </div>
+</div>

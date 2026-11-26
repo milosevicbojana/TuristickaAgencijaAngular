@@ -1,0 +1,130 @@
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="mb-4">{{ jeIzmena ? 'Izmeni aranžman' : 'Dodaj novi aranžman' }}</h2>
+
+    <form #forma="ngForm" (ngSubmit)="submitForma(forma)">
+
+        <div class="mb-3">
+            <label class="form-label">Naziv</label>
+            <input 
+                #nazivRef="ngModel" 
+                type="text" 
+                class="form-control" 
+                name="naziv" 
+                [(ngModel)]="naziv" 
+                required
+                minlength="2" 
+                maxlength="50" 
+            />
+                @if (nazivRef.invalid && (nazivRef.dirty || nazivRef.touched)) {
+                    <span class="text-danger">Naziv mora imati između 2 i 50 karaktera.</span>
+                }
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Opis</label>
+            <textarea 
+                #opisRef="ngModel" 
+                class="form-control" 
+                name="opis" 
+                [(ngModel)]="opis" 
+                required 
+                minlength="10"
+                maxlength="1000" 
+                rows="3">
+            </textarea>
+            @if (opisRef.invalid && (opisRef.dirty || opisRef.touched)) {
+                <span class="text-danger">Opis mora imati između 10 i 1000 karaktera.</span>
+            }
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Kategorija</label>
+            <select 
+                class="form-select" 
+                name="kategorijaId" 
+                [(ngModel)]="kategorijaId" 
+                required
+            >
+                <option [value]="0" disabled>Izaberi kategoriju</option>
+                @for (k of kategorije; track k.id) {
+                    <option [value]="k.id">{{ k.naziv }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cena (EUR)</label>
+            <input 
+                #cenaRef="ngModel" 
+                type="number" 
+                class="form-control" 
+                name="cena" 
+                [(ngModel)]="cena" 
+                required
+                min="0.01" 
+            />
+            @if (cenaRef.invalid && (cenaRef.dirty || cenaRef.touched)) {
+                <span class="text-danger">Cena mora biti veća od nule.</span>
+            }
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Slobodna mesta</label>
+            <input 
+                #slobodnaMestaRef="ngModel" 
+                type="number" 
+                class="form-control" 
+                name="slobodnaMesta"
+                [(ngModel)]="slobodnaMesta" 
+                required 
+                min="1" 
+            />
+            @if (slobodnaMestaRef.invalid && (slobodnaMestaRef.dirty || slobodnaMestaRef.touched)) {
+                <span class="text-danger">Broj slobodnih mesta mora biti pozitivan.</span>
+            }
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Datum početka</label>
+            <input 
+                #datumPocetkaRef="ngModel" 
+                type="date" 
+                class="form-control" 
+                name="datumPocetka"
+                [(ngModel)]="datumPocetka" 
+                required 
+                [attr.min]="danas" 
+            />
+            @if (datumPocetkaRef.invalid && (datumPocetkaRef.dirty || datumPocetkaRef.touched)) {
+                <span class="text-danger">Datum početka mora biti danas ili u budućnosti.</span>
+            }
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Datum završetka</label>
+            <input 
+                #datumZavrsetkaRef="ngModel" 
+                type="date" 
+                class="form-control" 
+                name="datumZavrsetka"
+                [(ngModel)]="datumZavrsetka" 
+                required 
+                [attr.min]="danas" 
+            />
+            @if (datumZavrsetkaRef.invalid && (datumZavrsetkaRef.dirty || datumZavrsetkaRef.touched)) {
+                <span class="text-danger">Datum završetka mora biti danas ili u budućnosti.</span>
+            }
+        </div>
+
+        @if (greska) {
+            <div class="alert alert-danger">{{ greska }}</div>
+        }
+        @if (poruka) {
+            <div class="alert alert-success">{{ poruka }}</div>
+        }
+
+        <button type="submit" class="btn btn-primary w-100" [disabled]="forma.invalid">
+            {{ jeIzmena ? 'Sačuvaj izmene' : 'Dodaj aranžman' }}
+        </button>
+    </form>
+</div>

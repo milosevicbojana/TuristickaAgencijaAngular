@@ -1,0 +1,115 @@
+@if (aranzman) {
+<div class="container mt-5">
+  <div class="card shadow-sm p-4 mb-4">
+    <h2>{{ aranzman.naziv }}</h2>
+    <h6 class="text-muted">{{ aranzman.kategorijaNaziv }}</h6>
+    <p class="mt-3">{{ aranzman.opis }}</p>
+    <p><strong>{{ aranzman.cena | currency:'EUR' }}</strong> po osobi</p>
+    <p>Slobodna mesta: {{ aranzman.slobodnaMesta }}</p>
+    <p><small class="text-muted">{{ aranzman.datumPocetka | date }} - {{ aranzman.datumZavrsetka | date }}</small></p>
+
+    @if (ocene.length > 0) {
+      <p>Prosečna ocena: <strong>{{ prosecnaOcena() }} / 5</strong> ({{ ocene.length }} ocena)</p>
+    } @else {
+      <p class="text-muted">Još nema ocena.</p>
+    }
+  </div>
+
+  @if (authService.isLoggedIn() && !authService.isAdmin()) {
+    <div class="card shadow-sm p-4 mb-4">
+      <h5>Rezerviši</h5>
+      <div class="d-flex gap-2 align-items-end">
+        <div>
+          <label class="form-label">Broj mesta</label>
+          <input type="number" class="form-control" [(ngModel)]="brojMesta" min="1" name="brojMesta" />
+        </div>
+        <button class="btn btn-primary" (click)="rezervisi()">Rezerviši</button>
+      </div>
+      <p class="mt-2 mb-0">Ukupna cena: <strong>{{ ukupnaCena() | currency:'EUR' }}</strong></p>
+      @if (greskaRezervacija) {
+        <div class="alert alert-danger mt-3">{{ greskaRezervacija }}</div>
+      }
+      @if (porukaRezervacija) {
+        <div class="alert alert-success mt-3">{{ porukaRezervacija }}</div>
+      }
+    </div>
+  }
+
+  <div class="card shadow-sm p-4 mb-4">
+    <h4>Komentari</h4>
+
+    @if (komentari.length === 0) {
+      <p class="text-muted">Još nema komentara.</p>
+    }
+
+    @for (k of komentari; track k.id) {
+      <div class="border-bottom py-2">
+        <div class="d-flex justify-content-between align-items-center">
+          <strong>{{ k.korisnickoIme }}</strong>
+          <div class="d-flex align-items-center gap-2">
+            @if (pronadjiOcenu(k.id); as ocena) {
+              <span class="badge bg-warning text-dark">⭐ {{ ocena }}/5</span>
+            }
+            @if (k.korisnickoIme === authService.getKorisnickoIme() || authService.isAdmin()) {
+              <button class="btn btn-outline-danger btn-sm" (click)="obrisiKomentar(k)">Obriši</button>
+            }
+          </div>
+        </div>
+        <p class="mb-0">{{ k.sadrzaj }}</p>
+      </div>
+    }
+  </div>
+
+  @if (authService.isLoggedIn()) {
+    <div class="card shadow-sm p-4">
+      <h5>Ostavi komentar i ocenu</h5>
+
+      <form #komentarForma="ngForm" (ngSubmit)="submitKomentar(komentarForma)">
+        
+        <div class="mb-3">
+          <label class="form-label">Komentar</label>
+          <textarea 
+            #sadrzaj="ngModel" 
+            class="form-control" 
+            name="sadrzaj" 
+            [(ngModel)]="noviKomentar.sadrzaj" 
+            required
+            rows="3"
+          ></textarea>
+          @if (sadrzaj.invalid && (sadrzaj.dirty || sadrzaj.touched)) {
+            <span class="text-danger">Komentar ne sme biti prazan.</span>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Ocena (1-5)</label>
+          <select 
+            class="form-select" 
+            name="vrednost" 
+            [(ngModel)]="noviKomentar.vrednost" 
+            required
+          >
+            @for (v of [1, 2, 3, 4, 5]; track v) {
+              <option [value]="v">{{ v }}</option>
+            }
+          </select>
+        </div>
+
+        @if (greska) {
+          <div class="alert alert-danger">{{ greska }}</div>
+        }
+        @if (poruka) {
+          <div class="alert alert-success">{{ poruka }}</div>
+        }
+
+        <button type="submit" class="btn btn-primary" [disabled]="komentarForma.invalid">Pošalji</button>
+      
+      </form>
+    </div>
+  } @else {
+    <p class="text-muted">Prijavi se da bi ostavio komentar i ocenu.</p>
+  }
+</div>
+} @else {
+  <p class="text-center mt-5">Učitavanje...</p>
+}
