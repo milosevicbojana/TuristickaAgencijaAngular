@@ -1,0 +1,7 @@
+model\Uloga.class
+model\Rezervacija.class
+model\Komentar.class
+model\Korisnik.class
+model\Aranzman.class
+model\Ocena.class
+model\Kategorija.class

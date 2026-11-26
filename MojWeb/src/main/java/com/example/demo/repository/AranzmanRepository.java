@@ -1,0 +1,8 @@
+package com.example.demo.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import model.Aranzman;
+
+public interface AranzmanRepository extends JpaRepository<Aranzman, Long> {
+}
